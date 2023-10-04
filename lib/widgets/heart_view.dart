@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
 class HeartView extends StatefulWidget {
-  HeartView({Key? key, required this.size, required this.heartColor})
+  const HeartView({Key? key, required this.size, required this.heartColor})
       : super(key: key);
 
-  double size;
-  Color heartColor;
+  final double size;
+  final Color heartColor;
 
   @override
-  _HeartViewState createState() => _HeartViewState();
+  HeartViewState createState() => HeartViewState();
 }
 
-class _HeartViewState extends State<HeartView> {
-  
+class HeartViewState extends State<HeartView> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -26,20 +25,18 @@ class _HeartViewState extends State<HeartView> {
 
 class HeartPainter extends CustomPainter {
   HeartPainter({Key? key, required this.heartColor}) : super();
-  
+
   Color heartColor;
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint();
-    paint
+    Paint hearthCircuit = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
       ..strokeWidth = 6;
 
-    Paint paint1 = Paint();
-    paint1
+    Paint hearthFill = Paint()
       ..color = heartColor
       ..style = PaintingStyle.fill
       ..strokeWidth = 0;
@@ -55,8 +52,8 @@ class HeartPainter extends CustomPainter {
     path.cubicTo(0.8 * width, height * 0.1, 1.25 * width, height * 0.6,
         0.5 * width, height);
 
-    canvas.drawPath(path, paint1);
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, hearthFill);
+    canvas.drawPath(path, hearthCircuit);
   }
 
   @override

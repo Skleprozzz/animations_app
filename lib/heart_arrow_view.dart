@@ -11,10 +11,12 @@ class HeartArrowView extends StatefulWidget {
   _HeartArrowViewState createState() => _HeartArrowViewState();
 }
 
-class _HeartArrowViewState extends State<HeartArrowView> with TickerProviderStateMixin {
+class _HeartArrowViewState extends State<HeartArrowView>
+    with TickerProviderStateMixin {
   late AnimationController _motionController;
   late AnimationController _arrowController;
   Animation? _colorAnimation;
+  late Animation<Offset> arrowMovingAnimation;
 
   double _beginX = Random().nextDouble() * (1 - (-1)) - 1;
   double _beginY = Random().nextDouble() * (1 - (-1)) - 1;
@@ -34,12 +36,11 @@ class _HeartArrowViewState extends State<HeartArrowView> with TickerProviderStat
       lowerBound: 0.5,
     );
 
-    _arrowController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    _arrowController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
 
-    _colorAnimation = ColorTween(
-      begin: Colors.red, 
-      end: Colors.pinkAccent
-    ).animate(_motionController);
+    _colorAnimation = ColorTween(begin: Colors.red, end: Colors.pinkAccent)
+        .animate(_motionController);
 
     _motionController.fling();
     _motionController.addStatusListener((status) {
@@ -55,6 +56,10 @@ class _HeartArrowViewState extends State<HeartArrowView> with TickerProviderStat
         }
       });
     });
+
+    arrowMovingAnimation = Tween<Offset>(
+            begin: Offset(_beginX, _beginY), end: Offset(_endX, _endY))
+        .animate(_arrowController);
 
     _motionController.addListener(() {
       setState(() {
@@ -82,11 +87,6 @@ class _HeartArrowViewState extends State<HeartArrowView> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    var arrowMovingAnimation = Tween<Offset>(
-        begin: Offset(_beginX, _beginY),
-        end: Offset(_endX, _endY)
-      ).animate(_arrowController);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -105,9 +105,7 @@ class _HeartArrowViewState extends State<HeartArrowView> with TickerProviderStat
                     height: 300,
                     child: Stack(children: [
                       HeartView(
-                          size: _size, 
-                          heartColor: _colorAnimation?.value
-                      ),
+                          size: _size, heartColor: _colorAnimation?.value),
                     ]),
                   ),
                 ),
@@ -134,8 +132,7 @@ Route _createRoute() {
     pageBuilder: (context, animation, _) => const RoundedTextView(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var animationRoute = Tween<Offset>(
-            begin: const Offset(0.0, 1.0), 
-            end: Offset.zero)
+              begin: const Offset(0.0, 1.0), end: Offset.zero)
           .animate(CurvedAnimation(parent: animation, curve: Curves.bounceOut));
 
       return SlideTransition(
